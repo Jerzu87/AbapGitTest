@@ -14,8 +14,8 @@ SELECTION-SCREEN END OF BLOCK b1.
 START-OF-SELECTION.
 
   DATA: lv_timestamp TYPE timestampl,
-        lv_utc_date  TYPE sy-datum,
-        lv_utc_time  TYPE sy-uzeit.
+        lv_jpn_date  TYPE sy-datum,
+        lv_jpn_time  TYPE sy-uzeit.
 
   " 1. Konwersja daty i czasu lokalnego na wewnętrzny znacznik czasu (UTC)
   " Uwzględnia strefę czasową podaną na ekranie selekcji
@@ -26,13 +26,13 @@ START-OF-SELECTION.
     EXIT.
   ENDIF.
 
-  " 2. Konwersja znacznika czasu z powrotem na datę i czas, ale wymuszając strefę 'UTC'
-  CONVERT TIME STAMP lv_timestamp TIME ZONE 'UTC'
-          INTO DATE lv_utc_date TIME lv_utc_time.
+  " 2. Konwersja znacznika czasu z powrotem na datę i czas, ale wymuszając strefę 'JAPAN'
+  CONVERT TIME STAMP lv_timestamp TIME ZONE 'JAPAN'
+          INTO DATE lv_jpn_date TIME lv_jpn_time.
 
   "--- Wyświetlenie wyników
   WRITE: / 'Dane wejściowe (', p_tzone, '):', p_date, p_time.
   ULINE.
-  WRITE: / 'Wynik w formacie UTC:'.
-  WRITE: / 'Data UTC:', lv_utc_date.
-  WRITE: / 'Czas UTC:', lv_utc_time.
+  WRITE: / 'Wynik w formacie dla Japonii:'.
+  WRITE: / 'Data Japonia:', lv_jpn_date.
+  WRITE: / 'Czas Japonia:', lv_jpn_time.
