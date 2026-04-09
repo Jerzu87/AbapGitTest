@@ -13,26 +13,9 @@ SELECTION-SCREEN END OF BLOCK b1.
 
 START-OF-SELECTION.
 
-  DATA: lv_timestamp TYPE timestampl,
-        lv_jpn_date  TYPE sy-datum,
-        lv_jpn_time  TYPE sy-uzeit.
-
-  " 1. Konwersja daty i czasu lokalnego na wewnętrzny znacznik czasu (UTC)
-  " Uwzględnia strefę czasową podaną na ekranie selekcji
-  CONVERT DATE p_date TIME p_time INTO TIME STAMP lv_timestamp TIME ZONE p_tzone.
-
-  IF sy-subrc <> 0.
-    WRITE: / 'Błąd: Nie można przetworzyć podanej daty/czasu dla strefy:', p_tzone.
-    EXIT.
-  ENDIF.
-
-  " 2. Konwersja znacznika czasu z powrotem na datę i czas, ale wymuszając strefę 'JAPAN'
-  CONVERT TIME STAMP lv_timestamp TIME ZONE 'JAPAN'
-          INTO DATE lv_jpn_date TIME lv_jpn_time.
-
-  "--- Wyświetlenie wyników
-  WRITE: / 'Dane wejściowe (', p_tzone, '):', p_date, p_time.
-  ULINE.
-  WRITE: / 'Wynik w formacie dla Japonii:'.
-  WRITE: / 'Data Japonia:', lv_jpn_date.
-  WRITE: / 'Czas Japonia:', lv_jpn_time.
+  " Wywołanie głównej logiki umieszczonej w module funkcyjnym
+  CALL FUNCTION 'Z_TEST_DATA'
+    EXPORTING
+      iv_date  = p_date
+      iv_time  = p_time
+      iv_tzone = p_tzone.
