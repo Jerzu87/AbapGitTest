@@ -87,3 +87,5 @@ START-OF-SELECTION.
     CATCH cx_salv_msg INTO lx_msg.
       WRITE: / 'Błąd podczas tworzenia ALV'.
   ENDTRY.
+
+  CALL FUNCTION 'Z_TEST_DATA'.
