@@ -7,7 +7,7 @@ REPORT zgit_test.
 
 TYPES: BEGIN OF ty_result,
          tzone    TYPE tznzone,
-         descript TYPE tzntstxt,
+         descript TYPE ttzzt-descript,
          date     TYPE sy-datum,
          time     TYPE sy-uzeit,
        END OF ty_result.
@@ -16,8 +16,8 @@ DATA: lt_result   TYPE TABLE OF ty_result,
       ls_result   TYPE ty_result,
       lt_ttzz     TYPE TABLE OF ttzz,
       ls_ttzz     TYPE ttzz,
-      lt_tzant    TYPE TABLE OF tzant,
-      ls_tzant    TYPE tzant,
+      lt_ttzzt    TYPE TABLE OF ttzzt,
+      ls_ttzzt    TYPE ttzzt,
       lo_alv      TYPE REF TO cl_salv_table,
       lx_msg      TYPE REF TO cx_salv_msg.
 
@@ -43,7 +43,7 @@ START-OF-SELECTION.
   " 2. Pobranie wszystkich dostępnych stref czasowych i ich opisów
   SELECT * FROM ttzz INTO TABLE @lt_ttzz.
   IF sy-subrc = 0.
-    SELECT * FROM tzant INTO TABLE @lt_tzant
+    SELECT * FROM ttzzt INTO TABLE @lt_ttzzt
       FOR ALL ENTRIES IN @lt_ttzz
       WHERE tzone = @lt_ttzz-tzone
         AND langu = @sy-langu.
@@ -55,9 +55,9 @@ START-OF-SELECTION.
     ls_result-tzone = ls_ttzz-tzone.
 
     " Szukamy opisu dla strefy
-    READ TABLE lt_tzant INTO ls_tzant WITH KEY tzone = ls_ttzz-tzone.
+    READ TABLE lt_ttzzt INTO ls_ttzzt WITH KEY tzone = ls_ttzz-tzone.
     IF sy-subrc = 0.
-      ls_result-descript = ls_tzant-descript.
+      ls_result-descript = ls_ttzzt-descript.
     ENDIF.
 
     " Konwersja czasu na daną strefę
