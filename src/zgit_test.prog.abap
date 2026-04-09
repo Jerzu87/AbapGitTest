@@ -29,63 +29,9 @@ SELECTION-SCREEN END OF BLOCK b1.
 
 START-OF-SELECTION.
 
-  DATA: lv_timestamp TYPE timestampl.
-
-  " 1. Konwersja daty i czasu lokalnego na wewnętrzny znacznik czasu (UTC)
-  " Uwzględnia strefę czasową podaną na ekranie selekcji
-  CONVERT DATE p_date TIME p_time INTO TIME STAMP lv_timestamp TIME ZONE p_tzone.
-
-  IF sy-subrc <> 0.
-    WRITE: / 'Błąd: Nie można przetworzyć podanej daty/czasu dla strefy:', p_tzone.
-    EXIT.
-  ENDIF.
-
-  " 2. Pobranie wszystkich dostępnych stref czasowych i ich opisów
-  SELECT * FROM ttzz INTO TABLE @lt_ttzz.
-  IF sy-subrc = 0.
-    SELECT * FROM ttzzt INTO TABLE @lt_ttzzt
-      FOR ALL ENTRIES IN @lt_ttzz
-      WHERE tzone = @lt_ttzz-tzone
-        AND langu = @sy-langu.
-  ENDIF.
-
-  " 3. Przeliczenie czasu dla każdej strefy
-  LOOP AT lt_ttzz INTO ls_ttzz.
-    CLEAR ls_result.
-    ls_result-tzone = ls_ttzz-tzone.
-
-    " Szukamy opisu dla strefy
-    READ TABLE lt_ttzzt INTO ls_ttzzt WITH KEY tzone = ls_ttzz-tzone.
-    IF sy-subrc = 0.
-      ls_result-descript = ls_ttzzt-descript.
-    ENDIF.
-
-    " Konwersja czasu na daną strefę
-    CONVERT TIME STAMP lv_timestamp TIME ZONE ls_result-tzone
-            INTO DATE ls_result-date TIME ls_result-time.
-
-    " Jeśli system zwróci sy-subrc <> 0, dodajemy rekord z wyczyszczoną datą/czasem,
-    " co już zostało obsłużone przez CLEAR na początku pętli. Ale dodajemy tylko poprawne.
-    IF sy-subrc = 0.
-      APPEND ls_result TO lt_result.
-    ENDIF.
-  ENDLOOP.
-
-  " 4. Wyświetlenie wyników przy pomocy ALV
-  TRY.
-      cl_salv_table=>factory(
-        IMPORTING
-          r_salv_table = lo_alv
-        CHANGING
-          t_table      = lt_result ).
-
-      " Dodanie standardowych funkcji do ALV (sortowanie, filtrowanie itp.)
-      lo_alv->get_functions( )->set_all( abap_true ).
-
-      lo_alv->display( ).
-
-    CATCH cx_salv_msg INTO lx_msg.
-      WRITE: / 'Błąd podczas tworzenia ALV'.
-  ENDTRY.
-
-  CALL FUNCTION 'Z_TEST_DATA'.
+  " Wywołanie głównej logiki umieszczonej w module funkcyjnym
+  CALL FUNCTION 'Z_TEST_DATA'
+    EXPORTING
+      iv_date  = p_date
+      iv_time  = p_time
+      iv_tzone = p_tzone.

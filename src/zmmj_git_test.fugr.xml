@@ -11,6 +11,25 @@
     <item>
      <FUNCNAME>Z_TEST_DATA</FUNCNAME>
      <SHORT_TEXT>Pusty moduł testowy</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>IV_DATE</PARAMETER>
+       <TYP>SY-DATUM</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_TIME</PARAMETER>
+       <TYP>SY-UZEIT</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>IV_TZONE</PARAMETER>
+       <TYP>TZNZONE</TYP>
+      </RSIMP>
+      <RSIMP>
+       <PARAMETER>GIT</PARAMETER>
+       <OPTIONAL>X</OPTIONAL>
+       <TYP>ZMMJ_E_GIT</TYP>
+      </RSIMP>
+     </IMPORT>
     </item>
    </FUNCTIONS>
   </asx:values>
